@@ -1,0 +1,553 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="P2P_PagoCobranzas_CargaDeArchivos"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:uou="clr-namespace:UiPath.OrchestratorClient.Utilities;assembly=UiPath.System.Activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Str_MacroSalida" Type="InArgument(x:String)" />
+    <x:Property Name="Str_Unidad" Type="InArgument(x:String)" />
+    <x:Property Name="Str_Archivos" Type="InArgument(x:String)" />
+    <x:Property Name="Str_PuertoFTP" Type="InArgument(x:String)" />
+    <x:Property Name="C_FTPCredentials" Type="InArgument(uou:Credential)" />
+    <x:Property Name="Str_ServidorFTP" Type="InArgument(x:String)" />
+    <x:Property Name="StatusReg" Type="OutArgument(x:String)" />
+    <x:Property Name="Str_Macro" Type="InArgument(x:String)" />
+    <x:Property Name="CommentReg" Type="OutArgument(x:String)" />
+    <x:Property Name="int_Reintentos" Type="InArgument(x:Double)" />
+    <x:Property Name="Str_path" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>P2P_PagoCobranzas_CargaDeArchivos_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>UiPath.OrchestratorClient.Utilities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Plugin.Workflow</AssemblyReference>
+      <AssemblyReference>System.Collections.Immutable</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_11">
+    <ui:RetryScope DisplayName="Retry Scope" sap2010:WorkflowViewState.IdRef="RetryScope_1" NumberOfRetries="[cint(int_Reintentos)]" RetryInterval="00:00:05">
+      <ui:RetryScope.ActivityBody>
+        <ActivityAction>
+          <Flowchart DisplayName="P2P_PagoCobranzas_CargaDeArchivos" sap2010:WorkflowViewState.IdRef="Flowchart_2">
+            <Flowchart.Variables>
+              <Variable x:TypeArguments="scg:List(x:String)" Name="ListaArchivos" />
+              <Variable x:TypeArguments="ui:GenericValue" Name="StatusFTP" />
+              <Variable x:TypeArguments="s:String[]" Name="StatusArray" />
+              <Variable x:TypeArguments="x:Int32" Default="0" Name="i" />
+            </Flowchart.Variables>
+            <Flowchart.StartNode>
+              <FlowStep x:Name="__ReferenceID0" sap2010:WorkflowViewState.IdRef="FlowStep_7">
+                <TryCatch DisplayName="TC - Carga de Archivos" sap2010:WorkflowViewState.IdRef="TryCatch_3">
+                  <TryCatch.Try>
+                    <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" Window="{x:Null}" DisplayName="Attach Window 'FileZilla'" sap2010:WorkflowViewState.IdRef="WindowScope_16" InformativeScreenshot="a0b3300818aa4405e288b112bd2d3d20" Selector="&lt;wnd app='filezilla.exe' cls='wxWindowNR' title='* - FileZilla' /&gt;">
+                      <ui:WindowScope.Body>
+                        <ActivityAction x:TypeArguments="x:Object">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                          </ActivityAction.Argument>
+                          <Sequence DisplayName="Carga de Archivos" sap2010:WorkflowViewState.IdRef="Sequence_33">
+                            <If Condition="[Str_Macro.ToString = &quot;No&quot;]" DisplayName="If usa macro?" sap2010:WorkflowViewState.IdRef="If_30">
+                              <If.Then>
+                                <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type Path de carpeta de macro" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_17" SendWindowMessages="False" SimulateType="False" Text="[Str_MacroSalida + &quot;\&quot;  + now.Date.ToString(&quot;dd.MM.yyyy&quot;) +&quot;\[k(enter)]&quot;]">
+                                  <ui:TypeInto.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="830716138ff2b72cfe999529e8fd2a38" Selector="&lt;wnd app='filezilla.exe' cls='wxWindowNR' title='* - FileZilla' /&gt;&lt;wnd cls='wxWindowNR' idx='6' title='panel' /&gt;&lt;wnd cls='Edit' /&gt;" WaitForReady="INTERACTIVE" />
+                                  </ui:TypeInto.Target>
+                                </ui:TypeInto>
+                              </If.Then>
+                              <If.Else>
+                                <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type Path de carpeta de archivos" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_18" SendWindowMessages="False" SimulateType="False" Text="[Str_MacroSalida + Str_Unidad + &quot;\SALIDA\[k(enter)]&quot;]">
+                                  <ui:TypeInto.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="830716138ff2b72cfe999529e8fd2a38" Selector="&lt;wnd app='filezilla.exe' cls='wxWindowNR' title='* - FileZilla' /&gt;&lt;wnd cls='wxWindowNR' idx='6' title='panel' /&gt;&lt;wnd cls='Edit' /&gt;" WaitForReady="INTERACTIVE" />
+                                  </ui:TypeInto.Target>
+                                </ui:TypeInto>
+                              </If.Else>
+                            </If>
+                            <Assign DisplayName="Assign Lista de archivos a subir" sap2010:WorkflowViewState.IdRef="Assign_24">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="scg:List(x:String)">[ListaArchivos]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="scg:List(x:String)">[Str_Archivos.ToString.ToLower.Split({" "c,","c}, StringSplitOptions.RemoveEmptyEntries).ToList]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" DisplayName="For Each" sap2010:WorkflowViewState.IdRef="ForEach`1_7" Values="[ListaArchivos]">
+                              <ui:ForEach.Body>
+                                <ActivityAction x:TypeArguments="x:String">
+                                  <ActivityAction.Argument>
+                                    <DelegateInArgument x:TypeArguments="x:String" Name="item" />
+                                  </ActivityAction.Argument>
+                                  <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" Window="{x:Null}" DisplayName="Attach Window 'FileZilla'" sap2010:WorkflowViewState.IdRef="WindowScope_14" InformativeScreenshot="4babbcfdb4f038e60bacc25e455c0ff4" Selector="&lt;wnd app='filezilla.exe' cls='wxWindowNR' title='* - FileZilla' /&gt;">
+                                    <ui:WindowScope.Body>
+                                      <ActivityAction x:TypeArguments="x:Object">
+                                        <ActivityAction.Argument>
+                                          <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                        </ActivityAction.Argument>
+                                        <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_29">
+                                          <ui:ClickText ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Archivo" FormattedText="False" sap2010:WorkflowViewState.IdRef="ClickText_10" KeyModifiers="None" MouseButton="BTN_LEFT" Occurrence="1" SendWindowMessages="False" Text="[item.ToString]">
+                                            <ui:ClickText.CursorPosition>
+                                              <ui:CursorPosition OffsetX="50" Position="Center">
+                                                <ui:CursorPosition.OffsetY>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:CursorPosition.OffsetY>
+                                              </ui:CursorPosition>
+                                            </ui:ClickText.CursorPosition>
+                                            <ui:ClickText.Target>
+                                              <ui:Target Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="2f7da788083b7cd7c29f57aa6f79d7d1" Selector="&lt;wnd cls='SysListView32' idx='4' /&gt;" WaitForReady="INTERACTIVE">
+                                                <ui:Target.ClippingRegion>
+                                                  <ui:Region Rectangle="0, 0, 20, 0" />
+                                                </ui:Target.ClippingRegion>
+                                              </ui:Target>
+                                            </ui:ClickText.Target>
+                                          </ui:ClickText>
+                                          <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type 'Enter'" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_19" SendWindowMessages="False" SimulateType="False" Text="%[k(enter)]">
+                                            <ui:TypeInto.Target>
+                                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="26587d4093cdceeed2950d506917e4ce" Selector="&lt;wnd cls='SysListView32' idx='4' /&gt;" WaitForReady="INTERACTIVE" />
+                                            </ui:TypeInto.Target>
+                                          </ui:TypeInto>
+                                          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" ContinueOnError="True" DisplayName="Click 'Sobreescribir'" sap2010:WorkflowViewState.IdRef="Click_13" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                                            <ui:Click.CursorPosition>
+                                              <ui:CursorPosition Position="Center">
+                                                <ui:CursorPosition.OffsetX>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:CursorPosition.OffsetX>
+                                                <ui:CursorPosition.OffsetY>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:CursorPosition.OffsetY>
+                                              </ui:CursorPosition>
+                                            </ui:Click.CursorPosition>
+                                            <ui:Click.Target>
+                                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="7654628b6ba6f5c5dad57cff10be7f33" Selector="&lt;wnd app='filezilla.exe' cls='#32770' title='El archivo de destino ya existe' /&gt;&lt;wnd cls='Button' title='Acción:' /&gt;&lt;wnd aaname='Sobrescribir' cls='Button' title='S&amp;amp;obrescribir' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+                                            </ui:Click.Target>
+                                          </ui:Click>
+                                          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" ContinueOnError="True" DisplayName="Click 'Aceptar'" sap2010:WorkflowViewState.IdRef="Click_14" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                                            <ui:Click.CursorPosition>
+                                              <ui:CursorPosition Position="Center">
+                                                <ui:CursorPosition.OffsetX>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:CursorPosition.OffsetX>
+                                                <ui:CursorPosition.OffsetY>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:CursorPosition.OffsetY>
+                                              </ui:CursorPosition>
+                                            </ui:Click.CursorPosition>
+                                            <ui:Click.Target>
+                                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="bebbec2cab71395f4c29f020c7b433eb" Selector="&lt;wnd app='filezilla.exe' cls='#32770' title='El archivo de destino ya existe' /&gt;&lt;wnd ctrlid='5100' title='Aceptar' /&gt;" TimeoutMS="500" WaitForReady="INTERACTIVE" />
+                                            </ui:Click.Target>
+                                          </ui:Click>
+                                          <Delay DisplayName="Delay 7 sec" Duration="00:00:07" sap2010:WorkflowViewState.IdRef="Delay_9" />
+                                        </Sequence>
+                                      </ActivityAction>
+                                    </ui:WindowScope.Body>
+                                  </ui:WindowScope>
+                                </ActivityAction>
+                              </ui:ForEach.Body>
+                            </ui:ForEach>
+                            <Delay DisplayName="Delay 5 sec" Duration="00:00:05" sap2010:WorkflowViewState.IdRef="Delay_10" />
+                            <ui:GetVisibleText WordsInfo="{x:Null}" DisplayName="Get Visible Text 'Status FTP'" FormattedText="False" sap2010:WorkflowViewState.IdRef="GetVisibleText_6">
+                              <ui:GetVisibleText.Target>
+                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fca5983870eaa9fe5306fea6ae52d30a" Selector="&lt;wnd cls='wxWindowNR' idx='2' title='control' /&gt;" WaitForReady="INTERACTIVE" />
+                              </ui:GetVisibleText.Target>
+                              <ui:GetVisibleText.Text>
+                                <OutArgument x:TypeArguments="ui:GenericValue">[StatusFTP]</OutArgument>
+                              </ui:GetVisibleText.Text>
+                            </ui:GetVisibleText>
+                            <Assign DisplayName="Assign Array de status" sap2010:WorkflowViewState.IdRef="Assign_25">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="s:String[]">[StatusArray]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="s:String[]">[StatusFTP.ToString.Split({" "}, StringSplitOptions.RemoveEmptyEntries).ToArray]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <While DisplayName="While recorre array" sap2010:WorkflowViewState.IdRef="While_6" Condition="[StatusArray.Count -1 &gt;i]">
+                              <Sequence DisplayName="Recorrer Array de status" sap2010:WorkflowViewState.IdRef="Sequence_31">
+                                <If Condition="[StatusArray(i).ToString.ToLower = &quot;fallidas&quot;]" DisplayName="If Status = fallidas" sap2010:WorkflowViewState.IdRef="If_32">
+                                  <If.Then>
+                                    <If Condition="[StatusArray(i+1).ToString.Contains(&quot;(&quot;)]" DisplayName="If Carga Fallo?" sap2010:WorkflowViewState.IdRef="If_31">
+                                      <If.Then>
+                                        <Throw DisplayName="Throw -- Nuevo Codigo" Exception="[new Exception(&quot;RPA_EXCODE:FZ_E003&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_14" />
+                                      </If.Then>
+                                    </If>
+                                  </If.Then>
+                                </If>
+                                <If Condition="[StatusArray(i).ToString.ToLower = &quot;satisfactorias&quot;]" DisplayName="If Status = Satisfactorio" sap2010:WorkflowViewState.IdRef="If_34">
+                                  <If.Then>
+                                    <If Condition="[StatusArray(i+1).ToString.Replace(&quot;(&quot;, &quot;&quot;).Replace(&quot;)&quot;, &quot;&quot;) = ListaArchivos.Count.ToString]" DisplayName="If Carga = cantidad de archivos" sap2010:WorkflowViewState.IdRef="If_33">
+                                      <If.Then>
+                                        <Sequence DisplayName="Archivos cargados correctamente" sap2010:WorkflowViewState.IdRef="Sequence_30">
+                                          <Assign sap2010:WorkflowViewState.IdRef="Assign_26">
+                                            <Assign.To>
+                                              <OutArgument x:TypeArguments="x:String">[StatusReg]</OutArgument>
+                                            </Assign.To>
+                                            <Assign.Value>
+                                              <InArgument x:TypeArguments="x:String">Completado</InArgument>
+                                            </Assign.Value>
+                                          </Assign>
+                                          <Assign sap2010:WorkflowViewState.IdRef="Assign_27">
+                                            <Assign.To>
+                                              <OutArgument x:TypeArguments="x:String">[CommentReg]</OutArgument>
+                                            </Assign.To>
+                                            <Assign.Value>
+                                              <InArgument x:TypeArguments="x:String">La unidad fue procesada exitosamente</InArgument>
+                                            </Assign.Value>
+                                          </Assign>
+                                        </Sequence>
+                                      </If.Then>
+                                    </If>
+                                  </If.Then>
+                                </If>
+                                <Assign DisplayName="Assign contador + 1" sap2010:WorkflowViewState.IdRef="Assign_28">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:Int32">[i]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:Int32">[i + 1]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                              </Sequence>
+                            </While>
+                            <If Condition="[StatusReg = &quot;Completado&quot;]" DisplayName="If status = Completado?" sap2010:WorkflowViewState.IdRef="If_35">
+                              <If.Then>
+                                <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" Window="{x:Null}" DisplayName="Attach Window 'FileZilla'" sap2010:WorkflowViewState.IdRef="WindowScope_15" InformativeScreenshot="e3893da2b048195c34399aa0808c509d" Selector="&lt;wnd app='filezilla.exe' cls='wxWindowNR' title='* - FileZilla' /&gt;">
+                                  <ui:WindowScope.Body>
+                                    <ActivityAction x:TypeArguments="x:Object">
+                                      <ActivityAction.Argument>
+                                        <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                      </ActivityAction.Argument>
+                                      <Sequence DisplayName="Limpiar status de FTP" sap2010:WorkflowViewState.IdRef="Sequence_32">
+                                        <ui:ClickText ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Text 'Transferencias satisfactorias'" FormattedText="False" sap2010:WorkflowViewState.IdRef="ClickText_11" KeyModifiers="None" MouseButton="BTN_LEFT" Occurrence="1" SendWindowMessages="False" Text="Transferencias satisfactorias">
+                                          <ui:ClickText.CursorPosition>
+                                            <ui:CursorPosition Position="Center">
+                                              <ui:CursorPosition.OffsetX>
+                                                <InArgument x:TypeArguments="x:Int32" />
+                                              </ui:CursorPosition.OffsetX>
+                                              <ui:CursorPosition.OffsetY>
+                                                <InArgument x:TypeArguments="x:Int32" />
+                                              </ui:CursorPosition.OffsetY>
+                                            </ui:CursorPosition>
+                                          </ui:ClickText.CursorPosition>
+                                          <ui:ClickText.Target>
+                                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="c0b15e6e9b92d7c09d1e7f9746320f76" Selector="&lt;wnd cls='wxWindowNR' idx='2' title='control' /&gt;" WaitForReady="INTERACTIVE" />
+                                          </ui:ClickText.Target>
+                                        </ui:ClickText>
+                                        <ui:SendHotkey DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Send Hotkey 'Ctrl + a'" EmptyField="False" sap2010:WorkflowViewState.IdRef="SendHotkey_4" Key="a" KeyModifiers="Ctrl" SendWindowMessages="False" SpecialKey="False">
+                                          <ui:SendHotkey.Target>
+                                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="5b083f57d82abbfc1608a20ea09c2af1" Selector="&lt;wnd cls='SysListView32' idx='3' /&gt;" WaitForReady="INTERACTIVE" />
+                                          </ui:SendHotkey.Target>
+                                        </ui:SendHotkey>
+                                        <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type Into 'DELETE'" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_20" SendWindowMessages="False" SimulateType="False" Text="%[k(del)]">
+                                          <ui:TypeInto.Target>
+                                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="5b083f57d82abbfc1608a20ea09c2af1" Selector="&lt;wnd cls='SysListView32' idx='3' /&gt;" WaitForReady="INTERACTIVE" />
+                                          </ui:TypeInto.Target>
+                                        </ui:TypeInto>
+                                      </Sequence>
+                                    </ActivityAction>
+                                  </ui:WindowScope.Body>
+                                </ui:WindowScope>
+                              </If.Then>
+                              <If.Else>
+                                <Throw DisplayName="Throw -- Nuevo Codigo" Exception="[new Exception(&quot;RPA_EXCODE:FZ_E004&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_15" />
+                              </If.Else>
+                            </If>
+                            <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Trace" Message="[&quot;FileZilla: Carga de archivos completada&quot;]" />
+                          </Sequence>
+                        </ActivityAction>
+                      </ui:WindowScope.Body>
+                    </ui:WindowScope>
+                  </TryCatch.Try>
+                  <TryCatch.Catches>
+                    <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch`1_3">
+                      <ActivityAction x:TypeArguments="s:Exception">
+                        <ActivityAction.Argument>
+                          <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                        </ActivityAction.Argument>
+                        <Sequence DisplayName="Error en la carga de archivos" sap2010:WorkflowViewState.IdRef="Sequence_34">
+                          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Login FileZilla" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="[Str_path &amp; &quot;P2P_PagoCobranzas_LoginFileZilla.xaml&quot;]">
+                            <ui:InvokeWorkflowFile.Arguments>
+                              <InArgument x:TypeArguments="x:String" x:Key="Str_PuertoFTP">[Str_PuertoFTP]</InArgument>
+                              <InArgument x:TypeArguments="uou:Credential" x:Key="C_FTPCredentials">[C_FTPCredentials]</InArgument>
+                              <InArgument x:TypeArguments="x:String" x:Key="Str_ServidorFTP">[Str_ServidorFTP]</InArgument>
+                              <InArgument x:TypeArguments="x:Double" x:Key="int_Reintentos">[int_Reintentos]</InArgument>
+                            </ui:InvokeWorkflowFile.Arguments>
+                          </ui:InvokeWorkflowFile>
+                          <If Condition="[exception.Message.Contains(&quot;RPA_EXCODE:&quot;)]" sap2010:WorkflowViewState.IdRef="If_36">
+                            <If.Then>
+                              <Throw DisplayName="Throw -- Mismo Codigo" Exception="[new Exception(&quot;RPA_EXCODE:&quot; &amp; exception.Message.Split({&quot;RPA_EXCODE:&quot;},StringSplitOptions.None).Last)]" sap2010:WorkflowViewState.IdRef="Throw_16" />
+                            </If.Then>
+                            <If.Else>
+                              <Throw DisplayName="Throw -- Nuevo Codigo" Exception="[new Exception(&quot;RPA_EXCODE:FZ_E005&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_17" />
+                            </If.Else>
+                          </If>
+                        </Sequence>
+                      </ActivityAction>
+                    </Catch>
+                  </TryCatch.Catches>
+                </TryCatch>
+              </FlowStep>
+            </Flowchart.StartNode>
+            <x:Reference>__ReferenceID0</x:Reference>
+          </Flowchart>
+        </ActivityAction>
+      </ui:RetryScope.ActivityBody>
+      <ui:RetryScope.Condition>
+        <ActivityFunc x:TypeArguments="x:Boolean" />
+      </ui:RetryScope.Condition>
+    </ui:RetryScope>
+    <sads:DebugSymbol.Symbol>d2pDOlxBdXRvbWF0eVwxX1ByZXBhcmFjaW9uIHByb3B1ZXN0YVxVaVBhdGhcUDJQX0NBUkdBX1BBR09fQ09CUkFOWkFTXFAyUF9QYWdvQ29icmFuemFzX0NhcmdhRGVBcmNoaXZvcy54YW1sa1YD5AIOAgEBVwXiAhUCAQJXlAFXngEDAYgBV21XhQEDAYYBWgvcAhcCAQNfO18+AgEEYxHYAhwCAQVlFbsCJgIBGcMCGdQCJAIBBmWbAmXlAgMBhQFrG7gCJgIBGsQCG8sCMwIBDswCG9MCIAIBB2wdeyICAXp8HYMBJgIBdoQBHcsBKgIBXcwBHcwBfwIBW80BHdQBMQIBV9UBHdwBJgIBU90BHYsCJQIBL4wCHbYCIgIBHbcCHbcCxQECARvHAmXHAncCARfGAlzGAmsCARXIAl7IAm8CARPJAl3JAm0CARHEAskBxAKNAgIBD8wCKcwCYAIBCM4CH84CggICAQzRAh/RArMBAgEKbCtsUgIBe24hci8DAYIBdSF5LwIBfYEBUoEBsgECAXl+U35iAgF3hAGoAYQBuQECAXSKASPIATQCAV7MAUfMAVECAVzPAbABzwHoAQIBWtIBUNIBWwIBWNoBStoBmgECAVbXAUvXAVgCAVTeAR+KAioCATHdAXrdAZgBAgEwjAIrjAJRAgEejgIhsQIyAgEitAIhtAK1AQIBILcCiwG3AsIBAgEczgJUzgLUAQIBDdECVNEChQECAQtwtAFwygIDAYQBbr8CbqgDAwGDAXe0AXfKAgMBgQF1wgJ1gwMCAX6KAakCigHzAgIBc5ABKcUBNAIBX98BIecBJgIBSegBIYECJgIBN4ICIYkCKgIBMo4CpwKOAvECAgEulAInrgIyAgEjtAJWtAKHAQIBIZEBK6ABOgIBbaEBK6UBOQIBaqYBK7QBNgIBZrUBK8MBNgIBYsQBK8QBjAECAWDfAS/fAWkCAUrhASXlASoCAU3oAS/oAW8CATjqASX/ASoCATuHAkuHAlICATWEAkyEAk8CATOVAimjAjgCASqkAimoAjkCASepAimtAjcCASSRAdICkQHjAgIBb5EBrgKRAbECAgFumgGkAZoBzwECAXKTAUqTAU4CAXGjAb4BowHpAQIBbKEBuQKhAcYCAgFrsgGpAbIB+QICAWmyAYQDsgGKAwIBaKYBiAGmAY4BAgFnwQGpAcEBrAICAWXBAbcCwQG8AgIBZLUBiAG1AY4BAgFjxAFVxAFfAgFh4QEz4QFoAgFO4wEp4wG9AQIBUeoBM+oBuQECATzsASn9ATQCAUCVAu0ClQKMAwIBLJUCyQKVAswCAgEroQK8AaEC9AECAS2mArwBpgLnAQIBKaQCkwKkApYCAgEoqwK8AasC5wECASapAr0CqQLIAgIBJeMBXuMBjwECAVLtASv0ATQCAUX1ASv8ATQCAUHyAVbyAWACAUjvAVfvAWICAUb6AVb6AXoCAUT3AVf3AWMCAUI=</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="TypeInto_17" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="TypeInto_18" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="If_30" sap:VirtualizedContainerService.HintSize="653,281">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_24" sap:VirtualizedContainerService.HintSize="653,60" />
+      <sap2010:ViewStateData Id="ClickText_10" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="TypeInto_19" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="Click_13" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Click_14" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Delay_9" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="Sequence_29" sap:VirtualizedContainerService.HintSize="336,786">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_14" sap:VirtualizedContainerService.HintSize="414,932" />
+      <sap2010:ViewStateData Id="ForEach`1_7" sap:VirtualizedContainerService.HintSize="653,1065">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Delay_10" sap:VirtualizedContainerService.HintSize="653,22" />
+      <sap2010:ViewStateData Id="GetVisibleText_6" sap:VirtualizedContainerService.HintSize="653,106" />
+      <sap2010:ViewStateData Id="Assign_25" sap:VirtualizedContainerService.HintSize="653,60" />
+      <sap2010:ViewStateData Id="Throw_14" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_31" sap:VirtualizedContainerService.HintSize="464,207">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_32" sap:VirtualizedContainerService.HintSize="242,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_26" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Assign_27" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Sequence_30" sap:VirtualizedContainerService.HintSize="264,284">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_33" sap:VirtualizedContainerService.HintSize="464,431">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_34" sap:VirtualizedContainerService.HintSize="242,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_28" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Sequence_31" sap:VirtualizedContainerService.HintSize="264,366">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="While_6" sap:VirtualizedContainerService.HintSize="653,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ClickText_11" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="SendHotkey_4" sap:VirtualizedContainerService.HintSize="314,154" />
+      <sap2010:ViewStateData Id="TypeInto_20" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="Sequence_32" sap:VirtualizedContainerService.HintSize="336,626">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_15" sap:VirtualizedContainerService.HintSize="414,772" />
+      <sap2010:ViewStateData Id="Throw_15" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_35" sap:VirtualizedContainerService.HintSize="653,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="653,91" />
+      <sap2010:ViewStateData Id="Sequence_33" sap:VirtualizedContainerService.HintSize="675,2231">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_16" sap:VirtualizedContainerService.HintSize="689,2417">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="464,87" />
+      <sap2010:ViewStateData Id="Throw_16" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Throw_17" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_36" sap:VirtualizedContainerService.HintSize="464,208" />
+      <sap2010:ViewStateData Id="Sequence_34" sap:VirtualizedContainerService.HintSize="486,459">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Catch`1_3" sap:VirtualizedContainerService.HintSize="693,21">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TryCatch_3" sap:VirtualizedContainerService.HintSize="707,2684">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_7">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">200,140</av:Point>
+            <av:Size x:Key="ShapeSize">200,51</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Flowchart_2" sap:VirtualizedContainerService.HintSize="614,636">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <av:Point x:Key="ShapeLocation">270,2.5</av:Point>
+            <av:Size x:Key="ShapeSize">60,75</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">300,77.5 300,140</av:PointCollection>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="RetryScope_1" sap:VirtualizedContainerService.HintSize="636,810">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="658,934">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="P2P_PagoCobranzas_CargaDeArchivos_1" sap:VirtualizedContainerService.HintSize="698,1014" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

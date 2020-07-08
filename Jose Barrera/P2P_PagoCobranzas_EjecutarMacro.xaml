@@ -1,0 +1,438 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Ejecutar_Macro"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Str_RutaDescarga" Type="InArgument(x:String)" />
+    <x:Property Name="Str_Unidad" Type="InArgument(x:String)" />
+    <x:Property Name="Str_Macro" Type="InArgument(x:String)" />
+    <x:Property Name="Str_MacroEntrada" Type="InArgument(x:String)" />
+    <x:Property Name="StatusReg" Type="OutArgument(x:String)" />
+    <x:Property Name="Str_RutaMacro" Type="InArgument(x:String)" />
+    <x:Property Name="Str_NombreMacro" Type="InArgument(x:String)" />
+    <x:Property Name="CommentReg" Type="OutArgument(x:String)" />
+    <x:Property Name="int_Reintentos" Type="InArgument(x:Double)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>Ejecutar_Macro_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>UiPath.Excel</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.Collections.Immutable</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Plugin.Workflow</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="TC - Ejecutar Macro" sap2010:WorkflowViewState.IdRef="Sequence_8">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="ui:WorkbookApplication" Name="WorkbookMacro" />
+    </Sequence.Variables>
+    <ui:CopyFile ContinueOnError="{x:Null}" Destination="[Str_MacroEntrada + &quot;\&quot; + path.GetFileName(Directory.GetFiles(Str_RutaDescarga.ToString.Replace(&quot;Temporal&quot;, &quot;&quot;) + Str_Unidad + &quot;\&quot; + now.Date.ToString(&quot;dd.MM.yyyy&quot;)).First)]" DisplayName="Copiar archivo a carpeta entrada" sap2010:WorkflowViewState.IdRef="CopyFile_2" Overwrite="True" Path="[Directory.GetFiles(Str_RutaDescarga.ToString.Replace(&quot;Temporal&quot;, &quot;&quot;) + Str_Unidad + &quot;\&quot; + now.Date.ToString(&quot;dd.MM.yyyy&quot;)).First]" />
+    <ui:RetryScope DisplayName="Retry Scope" sap2010:WorkflowViewState.IdRef="RetryScope_1" NumberOfRetries="[cint(int_Reintentos)]" RetryInterval="00:00:05">
+      <ui:RetryScope.ActivityBody>
+        <ActivityAction>
+          <TryCatch DisplayName="TC - Correr Macro" sap2010:WorkflowViewState.IdRef="TryCatch_2">
+            <TryCatch.Try>
+              <ui:ExcelApplicationScope Password="{x:Null}" DisplayName="Leer archivo de macro" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_3" Workbook="[WorkbookMacro]" WorkbookPath="[Str_RutaMacro]">
+                <ui:ExcelApplicationScope.Body>
+                  <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+                    <ActivityAction.Argument>
+                      <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+                    </ActivityAction.Argument>
+                    <Sequence DisplayName="Ejecutar Macro" sap2010:WorkflowViewState.IdRef="Sequence_19">
+                      <ui:ExcelWriteCell Cell="D9" DisplayName="Escribir unidad" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_3" SheetName="MENU" Text="[Str_Unidad]" />
+                      <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" Window="{x:Null}" DisplayName="Attach Window 'Excel Macro'" sap2010:WorkflowViewState.IdRef="WindowScope_3" InformativeScreenshot="44d9e55fe9e6b5ef8328bbea8a1417ca" Selector="&lt;wnd app='excel.exe' cls='XLMAIN' title='Herramienta*' /&gt;">
+                        <ui:WindowScope.Body>
+                          <ActivityAction x:TypeArguments="x:Object">
+                            <ActivityAction.Argument>
+                              <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                            </ActivityAction.Argument>
+                            <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_18">
+                              <ui:Activate DelayBefore="{x:Null}" DelayMS="{x:Null}" DisplayName="Activate 'Excel Macro'" sap2010:WorkflowViewState.IdRef="Activate_5">
+                                <ui:Activate.Target>
+                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="077ed73b11a760b070b48cfd79ad6af7" Selector="&lt;wnd cls='NetUIHWND' idx='2' /&gt;" WaitForReady="INTERACTIVE" />
+                                </ui:Activate.Target>
+                              </ui:Activate>
+                              <ui:SendHotkey DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Send Hotkey 'Correr macro'" EmptyField="False" sap2010:WorkflowViewState.IdRef="SendHotkey_4" Key="f8" KeyModifiers="Alt" SendWindowMessages="False" SpecialKey="True">
+                                <ui:SendHotkey.Target>
+                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="32bacc77c20e1f089c216def4e01cb5b" Selector="&lt;wnd app='excel.exe' cls='XLMAIN' title='Herramienta*' /&gt;&lt;wnd cls='EXCEL7' title='Herramienta*' /&gt;" WaitForReady="INTERACTIVE" />
+                                </ui:SendHotkey.Target>
+                              </ui:SendHotkey>
+                              <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type 'Nombre de la macro'" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_4" SendWindowMessages="False" SimulateType="False" Text="[Str_NombreMacro]">
+                                <ui:TypeInto.Target>
+                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="c2339ce0f9c714ca781c7f584b0bfe31" Selector="&lt;wnd app='excel.exe' cls='bosa_sdm_XL9' title='Macro' /&gt;&lt;wnd aaname='*' cls='EDTBX' /&gt;" WaitForReady="INTERACTIVE" />
+                                </ui:TypeInto.Target>
+                              </ui:TypeInto>
+                              <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'Ejecutar'" sap2010:WorkflowViewState.IdRef="Click_11" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                                <ui:Click.CursorPosition>
+                                  <ui:CursorPosition Position="Center">
+                                    <ui:CursorPosition.OffsetX>
+                                      <InArgument x:TypeArguments="x:Int32" />
+                                    </ui:CursorPosition.OffsetX>
+                                    <ui:CursorPosition.OffsetY>
+                                      <InArgument x:TypeArguments="x:Int32" />
+                                    </ui:CursorPosition.OffsetY>
+                                  </ui:CursorPosition>
+                                </ui:Click.CursorPosition>
+                                <ui:Click.Target>
+                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="bc1bf9ddcf6f29fe3a216c7aa2a75eaf" Selector="&lt;wnd app='excel.exe' cls='bosa_sdm_XL9' title='Macro' /&gt;&lt;ctrl name='Macro' role='dialog' /&gt;&lt;ctrl name='Ejecutar' role='push button' /&gt;" WaitForReady="INTERACTIVE" />
+                                </ui:Click.Target>
+                              </ui:Click>
+                              <Pick sap2010:WorkflowViewState.IdRef="Pick_2">
+                                <PickBranch DisplayName="PickBranch Ejecucion exitosa" sap2010:WorkflowViewState.IdRef="PickBranch_5">
+                                  <PickBranch.Trigger>
+                                    <ui:WaitUiElementAppear FoundElement="{x:Null}" DisplayName="Find Element 'Exitosamente'" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_8" WaitActive="False" WaitVisible="False">
+                                      <ui:WaitUiElementAppear.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="f49b17059068f1f7ffde18808d4181a7" Selector="&lt;wnd app='excel.exe' cls='#32770' title='Microsoft Excel' /&gt;&lt;wnd ctrlid='65535' title='Su soclicitud fue completada exitosamente' /&gt;" TimeoutMS="660000" WaitForReady="INTERACTIVE" />
+                                      </ui:WaitUiElementAppear.Target>
+                                    </ui:WaitUiElementAppear>
+                                  </PickBranch.Trigger>
+                                  <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'Aceptar'" sap2010:WorkflowViewState.IdRef="Click_13" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                                    <ui:Click.CursorPosition>
+                                      <ui:CursorPosition Position="Center">
+                                        <ui:CursorPosition.OffsetX>
+                                          <InArgument x:TypeArguments="x:Int32" />
+                                        </ui:CursorPosition.OffsetX>
+                                        <ui:CursorPosition.OffsetY>
+                                          <InArgument x:TypeArguments="x:Int32" />
+                                        </ui:CursorPosition.OffsetY>
+                                      </ui:CursorPosition>
+                                    </ui:Click.CursorPosition>
+                                    <ui:Click.Target>
+                                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="5c2933c6b2220a1e5e30ce7765ca2857" Selector="&lt;wnd app='excel.exe' cls='#32770' title='Microsoft Excel' /&gt;&lt;wnd ctrlid='2' title='Aceptar' /&gt;" WaitForReady="INTERACTIVE" />
+                                    </ui:Click.Target>
+                                  </ui:Click>
+                                </PickBranch>
+                                <PickBranch DisplayName="PickBranch Ejecucion Fallida" sap2010:WorkflowViewState.IdRef="PickBranch_6">
+                                  <PickBranch.Trigger>
+                                    <ui:WaitUiElementAppear FoundElement="{x:Null}" DisplayName="Find Element 'Fallido'" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_9" WaitActive="False" WaitVisible="False">
+                                      <ui:WaitUiElementAppear.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="8613281bc1f19765f9de848c5ce59be0" Selector="&lt;wnd app='excel.exe' cls='#32770' title='Microsoft Excel' /&gt;&lt;wnd ctrlid='65535' title='Su solicitud no pudo ser completada por un error en el archivo d*' /&gt;" TimeoutMS="660000" WaitForReady="INTERACTIVE" />
+                                      </ui:WaitUiElementAppear.Target>
+                                    </ui:WaitUiElementAppear>
+                                  </PickBranch.Trigger>
+                                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_21">
+                                    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'Aceptar'" sap2010:WorkflowViewState.IdRef="Click_14" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                                      <ui:Click.CursorPosition>
+                                        <ui:CursorPosition Position="Center">
+                                          <ui:CursorPosition.OffsetX>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetX>
+                                          <ui:CursorPosition.OffsetY>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetY>
+                                        </ui:CursorPosition>
+                                      </ui:Click.CursorPosition>
+                                      <ui:Click.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="5c2933c6b2220a1e5e30ce7765ca2857" Selector="&lt;wnd app='excel.exe' cls='#32770' title='Microsoft Excel' /&gt;&lt;wnd ctrlid='2' title='Aceptar' /&gt;" WaitForReady="INTERACTIVE" />
+                                      </ui:Click.Target>
+                                    </ui:Click>
+                                    <Throw DisplayName="Throw -- Excepcion y retry" Exception="[new Exception(&quot;RPA_EXCODE:EE_M001&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_4" />
+                                  </Sequence>
+                                </PickBranch>
+                              </Pick>
+                              <ui:ExcelSaveWorkbook DisplayName="Save Workbook" sap2010:WorkflowViewState.IdRef="ExcelSaveWorkbook_1" />
+                              <Delay DisplayName="Delay 1 sec" Duration="00:00:01" sap2010:WorkflowViewState.IdRef="Delay_1" />
+                              <ui:ExcelCloseWorkbook DisplayName="Close Macro Workbook " sap2010:WorkflowViewState.IdRef="ExcelCloseWorkbook_2" Workbook="[WorkbookMacro]" />
+                              <Sequence DisplayName="CopyFilesDynamic">
+                                <Sequence.Variables>
+                                  <Variable x:TypeArguments="s:String[]" Name="copy" />
+                                  <Variable x:TypeArguments="x:String" Name="path1" />
+                                  <Variable x:TypeArguments="x:String" Name="path2" />
+                                  <Variable x:TypeArguments="x:Int32" Name="item" />
+                                  <Variable x:TypeArguments="x:String" Name="Str_TargetPath" />
+                                  <Variable x:TypeArguments="s:String[]" Name="ListFiles" />
+                                  <Variable x:TypeArguments="x:String" Name="Str_DestPath" />
+                                </Sequence.Variables>
+                                <Assign>
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:String">[Str_TargetPath]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:String">[Str_RutaMacro.ToString.Replace("Herramienta.xlsm", "") + Str_Unidad.ToString + "\SALIDA"]</InArgument>
+                                  </Assign.Value>
+                                  <sap2010:WorkflowViewState.IdRef>Assign_11</sap2010:WorkflowViewState.IdRef>
+                                </Assign>
+                                <ui:SelectFolder DisplayName="Select Folder" SelectedFolder="[Str_TargetPath]" sap2010:WorkflowViewState.IdRef="SelectFolder_1" />
+                                <Assign>
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="s:String[]">[ListFiles]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="s:String[]">[Directory.GetFiles(Str_TargetPath)]</InArgument>
+                                  </Assign.Value>
+                                  <sap2010:WorkflowViewState.IdRef>Assign_12</sap2010:WorkflowViewState.IdRef>
+                                </Assign>
+                                <Assign>
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:String">[Str_DestPath]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:String">[Str_RutaDescarga.ToString.Replace("Temporal", "") + Str_Unidad + "\" + now.Date.ToString("dd.MM.yyyy")]</InArgument>
+                                  </Assign.Value>
+                                  <sap2010:WorkflowViewState.IdRef>Assign_13</sap2010:WorkflowViewState.IdRef>
+                                </Assign>
+                                <ui:SelectFolder DisplayName="Select Folder" SelectedFolder="[Str_DestPath]" sap2010:WorkflowViewState.IdRef="SelectFolder_2" />
+                                <ui:ForEach x:TypeArguments="x:String" CurrentIndex="[item]" DisplayName="For Each" Values="[ListFiles]">
+                                  <ui:ForEach.Body>
+                                    <ActivityAction x:TypeArguments="x:String">
+                                      <ActivityAction.Argument>
+                                        <DelegateInArgument x:TypeArguments="x:String" Name="item" />
+                                      </ActivityAction.Argument>
+                                      <Sequence DisplayName="Body">
+                                        <Sequence.Variables>
+                                          <Variable x:TypeArguments="ui:GenericValue" Name="filename" />
+                                          <Variable x:TypeArguments="x:String" Name="fileindex" />
+                                          <Variable x:TypeArguments="ui:GenericValue" Name="Str_NameFile" />
+                                          <Variable x:TypeArguments="ui:GenericValue" Name="Str_FileIndex" />
+                                        </Sequence.Variables>
+                                        <Assign>
+                                          <Assign.To>
+                                            <OutArgument x:TypeArguments="ui:GenericValue">[Str_NameFile]</OutArgument>
+                                          </Assign.To>
+                                          <Assign.Value>
+                                            <InArgument x:TypeArguments="ui:GenericValue">[item.ToString.LastIndexOf("\")]</InArgument>
+                                          </Assign.Value>
+                                          <sap2010:WorkflowViewState.IdRef>Assign_14</sap2010:WorkflowViewState.IdRef>
+                                        </Assign>
+                                        <WriteLine DisplayName="Write Line" Text="[Str_NameFile]" sap2010:WorkflowViewState.IdRef="WriteLine_1" />
+                                        <Assign>
+                                          <Assign.To>
+                                            <OutArgument x:TypeArguments="ui:GenericValue">[Str_FileIndex]</OutArgument>
+                                          </Assign.To>
+                                          <Assign.Value>
+                                            <InArgument x:TypeArguments="ui:GenericValue">[item.ToString.Substring(Str_NameFile+1)]</InArgument>
+                                          </Assign.Value>
+                                          <sap2010:WorkflowViewState.IdRef>Assign_15</sap2010:WorkflowViewState.IdRef>
+                                        </Assign>
+                                        <ui:CopyFile ContinueOnError="{x:Null}" Destination="[Str_DestPath + &quot;\&quot; + Str_FileIndex]" DisplayName="Copy File" Overwrite="True" Path="[item]" sap2010:WorkflowViewState.IdRef="CopyFile_3" />
+                                        <sap2010:WorkflowViewState.IdRef>Sequence_22</sap2010:WorkflowViewState.IdRef>
+                                      </Sequence>
+                                    </ActivityAction>
+                                  </ui:ForEach.Body>
+                                  <sap2010:WorkflowViewState.IdRef>ForEach`1_1</sap2010:WorkflowViewState.IdRef>
+                                </ui:ForEach>
+                                <sap2010:WorkflowViewState.IdRef>Sequence_23</sap2010:WorkflowViewState.IdRef>
+                              </Sequence>
+                              <ui:Delete ContinueOnError="{x:Null}" DisplayName="Delete Archivo de Entrada" sap2010:WorkflowViewState.IdRef="Delete_1" Path="[Str_MacroEntrada + &quot;\&quot; + path.GetFileName(Directory.GetFiles(Str_RutaDescarga.ToString.Replace(&quot;Temporal&quot;, &quot;&quot;) + Str_Unidad + &quot;\&quot; + now.Date.ToString(&quot;dd.MM.yyyy&quot;)).First)]" />
+                              <Assign DisplayName="Assign Nuevo Status" sap2010:WorkflowViewState.IdRef="Assign_8">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="x:String">[StatusReg]</OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="x:String">Listo para Carga</InArgument>
+                                </Assign.Value>
+                              </Assign>
+                              <Assign DisplayName="Assign Nuevo Status" sap2010:WorkflowViewState.IdRef="Assign_10">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="x:String">[CommentReg]</OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="x:String">Macro ejecutada correctamente</InArgument>
+                                </Assign.Value>
+                              </Assign>
+                              <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Trace" Message="[&quot;Excel: Macro ejecutada exitosamente&quot;]" />
+                            </Sequence>
+                          </ActivityAction>
+                        </ui:WindowScope.Body>
+                      </ui:WindowScope>
+                    </Sequence>
+                  </ActivityAction>
+                </ui:ExcelApplicationScope.Body>
+              </ui:ExcelApplicationScope>
+            </TryCatch.Try>
+            <TryCatch.Catches>
+              <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch`1_2">
+                <ActivityAction x:TypeArguments="s:Exception">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                  </ActivityAction.Argument>
+                  <Sequence DisplayName="Excepcion Encontrada" sap2010:WorkflowViewState.IdRef="Sequence_20">
+                    <ui:ExcelCloseWorkbook DisplayName="Close Workbook" sap2010:WorkflowViewState.IdRef="ExcelCloseWorkbook_3" Workbook="[WorkbookMacro]" />
+                    <If Condition="[exception.Message.Contains(&quot;RPA_EXCODE:&quot;)]" sap2010:WorkflowViewState.IdRef="If_1">
+                      <If.Then>
+                        <Throw DisplayName="Throw -- Mismo Codigo" Exception="[new Exception(&quot;RPA_EXCODE:&quot; &amp; exception.Message.Split({&quot;RPA_EXCODE:&quot;},StringSplitOptions.None).Last)]" sap2010:WorkflowViewState.IdRef="Throw_2" />
+                      </If.Then>
+                      <If.Else>
+                        <Throw DisplayName="Throw -- Nuevo Codigo" Exception="[new Exception(&quot;RPA_EXCODE:EE_M002&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_3" />
+                      </If.Else>
+                    </If>
+                  </Sequence>
+                </ActivityAction>
+              </Catch>
+            </TryCatch.Catches>
+          </TryCatch>
+        </ActivityAction>
+      </ui:RetryScope.ActivityBody>
+      <ui:RetryScope.Condition>
+        <ActivityFunc x:TypeArguments="x:Boolean" />
+      </ui:RetryScope.Condition>
+    </ui:RetryScope>
+    <sads:DebugSymbol.Symbol>d6UBQzpcVXNlcnNcam9iYXJyZXIuQ09SUFxEZXNrdG9wXFByb3llY3Rvc1xDTUlcR2VuZXJhY2nDs24geSBjYXJnYSBkZSBpbmZvcm1hY2nDs24gYWwgUG9ydGFsIGRlIENvYnJhbnphc1xQMlBfQ0FSR0FfUEFHT19DT0JSQU5aQVNcUDJQX1BhZ29Db2JyYW56YXNfRWplY3V0YXJNYWNyby54YW1sYlMDyQIOAgEBVwVXvAQCAXlYBccCFQIBAlc5V5oCAgF7V40DV7kEAgF6WJQBWJ4BAgF4WG1YhQECAXZbC8ECFgIBA10PqwIqAgEPswITvQIeAgEEXaQBXbUBAgF0XcMBXdQBAgFyYxWoAiACARC0AhW0Ap0BAgEMtQIVvAIaAgEFZBdkrAECAW1lF6cCKAIBEbQCiQG0ApoBAgENtQIjtQJaAgEGtwIZtwL7AQIBCroCGboCrAECAQhkL2QzAgFxZJsBZKkBAgFvZI8BZJUBAgFuZZ4CZd8CAgFsax2kAigCARK3Ak63As4BAgELugJOugJ/AgEJbB9wLQIBanEfdS8CAWd2H3otAgFjex+JASoCAWGKAR++ASYCAVG/AR+/AYkBAgFQwAEfwAGAAQIBTsEBH8EBrgECAUvCAR+RAioCAR+SAh+SAoEDAgEdkwIfmgIoAgEZmwIfogIoAgEVowIfowLDAQIBE26yAW7ZAQIBa3OyAXOiAgIBaXGNAnGRAgIBaHiyAXiWAgIBZna5AnbMAgIBZIcBsgGHAcwCAgFiiwEhogEuAgFbowEhvQEuAgFSwAFJwAFTAgFPwQGaAcEBqwECAUzMASHUASoCAUXVASHVAaMBAgFC1gEh3gEqAgE+3wEh5wEqAgE66AEh6AGhAQIBN+kBIY8CLgIBIJICnQGSAv4CAgEemAJKmAJaAgEclQJLlQJWAgEaoAJKoAJnAgEYnQJLnQJXAgEWowKNAaMCwAECARSNASWRAT4CAV6TASOhAS4CAVylASWpAT4CAVirASO8AS4CAVPRAUzRAaYBAgFIzgFNzgFdAgFG1QFd1QFvAgFD2wFO2wFyAgFB2AFP2AFaAgE/5AFM5AG0AQIBPeEBTeEBWwIBO+gBXegBbQIBOOkBfOkBiQECATXpAVXpAV0CATPvASeLAjICASGPAaMBjwG1AgIBYI8BwAKPAcgCAgFfnwG2AZ8BogICAV2nAaMBpwHNAgIBWqcB2AKnAeACAgFZrAElugEwAgFWuwEluwG9AQIBVPYBKf4BMgIBLv8BKf8BkwECASyAAimIAjICASaJAimJAvQBAgEiuAG4AbgBpAICAVe7AV+7AZABAgFV+wFb+wF7AgEx+AFc+AFqAgEv/wFS/wFiAgEthQJbhQKEAQIBKYICXIICawIBJ4kCXYkCjQECASWJArwBiQLEAQIBIw==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="CopyFile_2" sap:VirtualizedContainerService.HintSize="976,22" />
+      <sap2010:ViewStateData Id="ExcelWriteCell_3" sap:VirtualizedContainerService.HintSize="900,87" />
+      <sap2010:ViewStateData Id="Activate_5" sap:VirtualizedContainerService.HintSize="864,106" />
+      <sap2010:ViewStateData Id="SendHotkey_4" sap:VirtualizedContainerService.HintSize="864,154" />
+      <sap2010:ViewStateData Id="TypeInto_4" sap:VirtualizedContainerService.HintSize="864,134" />
+      <sap2010:ViewStateData Id="Click_11" sap:VirtualizedContainerService.HintSize="864,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_8" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Click_13" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="PickBranch_5" sap:VirtualizedContainerService.HintSize="344,596" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_9" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Click_14" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Throw_4" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="Sequence_21" sap:VirtualizedContainerService.HintSize="336,292">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="PickBranch_6" sap:VirtualizedContainerService.HintSize="366,596" />
+      <sap2010:ViewStateData Id="Pick_2" sap:VirtualizedContainerService.HintSize="864,642" />
+      <sap2010:ViewStateData Id="ExcelSaveWorkbook_1" sap:VirtualizedContainerService.HintSize="864,22" />
+      <sap2010:ViewStateData Id="Delay_1" sap:VirtualizedContainerService.HintSize="864,22" />
+      <sap2010:ViewStateData Id="ExcelCloseWorkbook_2" sap:VirtualizedContainerService.HintSize="864,59" />
+      <sap2010:ViewStateData Id="Assign_11" sap:VirtualizedContainerService.HintSize="287,60" />
+      <sap2010:ViewStateData Id="SelectFolder_1" sap:VirtualizedContainerService.HintSize="287,22" />
+      <sap2010:ViewStateData Id="Assign_12" sap:VirtualizedContainerService.HintSize="287,60" />
+      <sap2010:ViewStateData Id="Assign_13" sap:VirtualizedContainerService.HintSize="287,60" />
+      <sap2010:ViewStateData Id="SelectFolder_2" sap:VirtualizedContainerService.HintSize="287,22" />
+      <sap2010:ViewStateData Id="Assign_14" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="242,61" />
+      <sap2010:ViewStateData Id="Assign_15" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="CopyFile_3" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_22" sap:VirtualizedContainerService.HintSize="264,447">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="287,580" />
+      <sap2010:ViewStateData Id="Sequence_23" sap:VirtualizedContainerService.HintSize="864,1128">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Delete_1" sap:VirtualizedContainerService.HintSize="864,22" />
+      <sap2010:ViewStateData Id="Assign_8" sap:VirtualizedContainerService.HintSize="864,60" />
+      <sap2010:ViewStateData Id="Assign_10" sap:VirtualizedContainerService.HintSize="864,60" />
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="864,91" />
+      <sap2010:ViewStateData Id="Sequence_18" sap:VirtualizedContainerService.HintSize="886,3210">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_3" sap:VirtualizedContainerService.HintSize="900,3356" />
+      <sap2010:ViewStateData Id="Sequence_19" sap:VirtualizedContainerService.HintSize="922,3607">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExcelApplicationScope_3" sap:VirtualizedContainerService.HintSize="936,3716">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExcelCloseWorkbook_3" sap:VirtualizedContainerService.HintSize="464,59" />
+      <sap2010:ViewStateData Id="Throw_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Throw_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,207" />
+      <sap2010:ViewStateData Id="Sequence_20" sap:VirtualizedContainerService.HintSize="486,430">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Catch`1_2" sap:VirtualizedContainerService.HintSize="940,21">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TryCatch_2" sap:VirtualizedContainerService.HintSize="954,3943" />
+      <sap2010:ViewStateData Id="RetryScope_1" sap:VirtualizedContainerService.HintSize="976,4117" />
+      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="998,4303">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Ejecutar_Macro_1" sap:VirtualizedContainerService.HintSize="1038,4383" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

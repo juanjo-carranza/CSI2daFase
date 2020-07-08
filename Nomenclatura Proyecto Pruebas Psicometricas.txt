@@ -1,0 +1,20 @@
+Para el proyecto, por solicitud del cliente se estará usando la siguiente nomenclatura
+
+Correo para inicio del Proceso
+CSI_ADT_ENVIO_PRUEBAS_PSICOMETRICAS
+ 
+
+Nomenclatura de Archivos UiPath
+ADT_PruebaPsicometrica_***          
+ 
+
+Carpeta de archivos Uipath
+ADT_PRUEBA_PSICOMETRICA
+
+ 
+Archivo de Configuración Individual
+Config_ADT_PruebaPsicometrica.xlsx
+
+ 
+Correo para cargar resultados de pruebas
+CSI_ADT_RESULTADOS_PRUEBAS_PSICOMETRICAS  (Esto no aplica debido a que la notificacion es mediante BPM)

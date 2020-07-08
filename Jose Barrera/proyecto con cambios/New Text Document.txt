@@ -1,0 +1,7 @@
+archivos con cambios:
+
+"C:\Users\jucarran\OneDrive - Capgemini\CMI_2da FASE\Jose Barrera\proyecto con cambios\P2P_CARGA_PAGO_COBRANZAS\P2P_PagoCobranzas_Main.xaml"
+"C:\Users\jucarran\OneDrive - Capgemini\CMI_2da FASE\Jose Barrera\proyecto con cambios\P2P_CARGA_PAGO_COBRANZAS\P2P_PagoCobranzas_EjecutarMacro.xaml"
+
+archivos nuevos:
+"C:\Users\jucarran\OneDrive - Capgemini\CMI_2da FASE\Jose Barrera\proyecto con cambios\P2P_CARGA_PAGO_COBRANZAS\P2P_PagoCobranzas_Clear_Temporal_Folder.xaml"
